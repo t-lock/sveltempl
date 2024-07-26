@@ -67,9 +67,9 @@ func (s *FiberServer) RegisterFiberRoutes() {
 	s.App.Get("/basic", adaptor.HTTPHandler(templ.Handler(web.Basic())))
 	s.App.Get("/code-only", adaptor.HTTPHandler(templ.Handler(web.CodeOnly("code <strong>only!</strong>"))))
 
-	s.App.Get("/BoxOne", adaptor.HTTPHandler(sveltemplHandler("BoxOne", iso)))
-	s.App.Get("/BoxTwo", adaptor.HTTPHandler(sveltemplHandler("BoxTwo", iso)))
-	s.App.Get("/BoxThree", adaptor.HTTPHandler(sveltemplHandler("BoxThree", iso)))
+	s.App.Get("/boxone", adaptor.HTTPHandler(sveltemplHandler("BoxOne", iso)))
+	s.App.Get("/boxtwo", adaptor.HTTPHandler(sveltemplHandler("BoxTwo", iso)))
+	s.App.Get("/boxthree", adaptor.HTTPHandler(sveltemplHandler("BoxThree", iso)))
 	s.App.Get("/not-a-component", adaptor.HTTPHandler(sveltemplHandler("Nope", iso)))
 
 	// blueprint

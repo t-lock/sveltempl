@@ -1,12 +1,6 @@
-var BoxThree = (function () {
+var PropText = (function () {
   'use strict';
 
-  function noop() {
-  }
-  function is_promise(value) {
-    return !!value && (typeof value === "object" || typeof value === "function") && typeof /** @type {any} */
-    value.then === "function";
-  }
   function run(fn) {
     return fn();
   }
@@ -73,32 +67,13 @@ var BoxThree = (function () {
       $$render
     };
   }
-  function add_classes(classes) {
-    return classes ? ` class="${classes}"` : "";
-  }
 
-  async function getTlock() {
-    const tlock = (await fetch("https://api.github.com/users/t-lock", {
-      headers: { "X-GitHub-Api-Version": "2022-11-28" }
-    })).json();
-    return tlock;
-  }
-  const BoxThree = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-    let { server = false } = $$props;
-    if ($$props.server === void 0 && $$bindings.server && server !== void 0) $$bindings.server(server);
-    return `<h2>Box Three
-  <span${add_classes(((server ? "server" : "") + " " + (!server ? "hydrated" : "")).trim())}>[${escape(server ? "server" : "hydrated")}]</span></h2> <p>The following is dynamic content</p> ${`<p>Component Not Mounted</p>`} ${function(__value) {
-    if (is_promise(__value)) {
-      __value.then(null, noop);
-      return ` <p>fetching...</p> `;
-    }
-    return function(tlock) {
-      return ` <div><pre>      ${escape(JSON.stringify(tlock, null, 2))}
-    </pre></div> `;
-    }(__value);
-  }(getTlock())}`;
+  const PropText = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+    let { text = "default" } = $$props;
+    if ($$props.text === void 0 && $$bindings.text && text !== void 0) $$bindings.text(text);
+    return `<div style="padding-left: 40px">${escape(text)} text</div>`;
   });
 
-  return BoxThree;
+  return PropText;
 
 })();

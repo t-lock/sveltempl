@@ -1,5 +1,6 @@
-var BoxTwo = function() {
-  "use strict";
+var BoxTwo = (function () {
+  'use strict';
+
   function noop() {
   }
   function run(fn) {
@@ -84,6 +85,7 @@ var BoxTwo = function() {
   function add_classes(classes) {
     return classes ? ` class="${classes}"` : "";
   }
+
   const subscriber_queue = [];
   function writable(value, start = noop) {
     let stop;
@@ -109,13 +111,13 @@ var BoxTwo = function() {
     function update(fn) {
       set(fn(value));
     }
-    function subscribe2(run2, invalidate = noop) {
-      const subscriber = [run2, invalidate];
+    function subscribe(run, invalidate = noop) {
+      const subscriber = [run, invalidate];
       subscribers.add(subscriber);
       if (subscribers.size === 1) {
         stop = start(set, update) || noop;
       }
-      run2(value);
+      run(value);
       return () => {
         subscribers.delete(subscriber);
         if (subscribers.size === 0 && stop) {
@@ -124,10 +126,11 @@ var BoxTwo = function() {
         }
       };
     }
-    return { set, update, subscribe: subscribe2 };
+    return { set, update, subscribe };
   }
   const count = writable(42);
-  const BoxTwo2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+
+  const BoxTwo = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     let $globalCount, $$unsubscribe_globalCount;
     $$unsubscribe_globalCount = subscribe(count, (value) => $globalCount = value);
     let count$1 = 0;
@@ -137,5 +140,7 @@ var BoxTwo = function() {
     return `<h2>Box Two
   <span${add_classes(((server ? "server" : "") + " " + (!server ? "hydrated" : "")).trim())}>[${escape(server ? "server" : "hydrated")}]</span></h2> <p>I render local state as well as global state from a store</p> <p>The count is ${escape(count$1)}</p> <button>Increase local</button> <div><p>Global count:</p> <pre>${escape($globalCount)}</pre></div>`;
   });
-  return BoxTwo2;
-}();
+
+  return BoxTwo;
+
+})();

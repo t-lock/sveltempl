@@ -7,8 +7,7 @@
     "dev": "vite",
     "build:client": "vite build --config vite.config.ts",
     "build:ssr": "vite build --config vite.config.ssr.ts",
-    "build:ssr-go": "node ./bin/bundle.js",
-    "build": "npm run build:client && npm run build:ssr && npm run build:ssr-go",
+    "build": "npm run build:client && npm run build:ssr",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json"
   },

@@ -14,6 +14,10 @@ export default function iifeBundle(options: Options = {}): Plugin {
     name: "vite-plugin-iife-bundle",
     apply: "build",
     async writeBundle() {
+      // Clear the output directory
+      await fs.rm(outputDir, { recursive: true, force: true });
+      await fs.mkdir(outputDir, { recursive: true });
+
       const inputFiles = await fs.readdir(inputDir);
       const jsFiles = inputFiles.filter((file) => file.endsWith(".js"));
 
