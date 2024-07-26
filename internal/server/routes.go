@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -16,21 +15,21 @@ import (
 	"rogchap.com/v8go"
 )
 
-func jsHandler(iso *v8go.Isolate) http.Handler {
-	return http.HandlerFunc(
-		func(w http.ResponseWriter, r *http.Request) {
+func templteHandler(componentName string, iso *v8go.Isolate) *templ.ComponentHandler {
+	htmlOutput, err := templteRenderToString(componentName, iso)
+	if (err != nil) {
+		return templ.Handler(web.TemplteComponent("<p style='color: red'>" + err.Error() + "</p>"))
+	}
+
+	return templ.Handler(web.TemplteBase(web.TemplteComponent(htmlOutput)))
+}
+
+func templteRenderToString(componentName string, iso *v8go.Isolate) (string, error) {
 			// Create a new Javascript context
 			ctx := v8go.NewContext(iso)
 
-			// Parse the query parameters
-			queryParams := r.URL.Query()
-
-			// Get the value of the 'name' parameter
-			componentName := queryParams.Get("component")
-
 			if (componentName =="") {
-				http.Error(w, "You must pass in a component name to render", http.StatusInternalServerError)
-				return
+				return "", fmt.Errorf("you must pass in a component name to render")
 			}
 
 			// Construct the file path using fmt.Sprintf for string interpolation
@@ -43,27 +42,22 @@ func jsHandler(iso *v8go.Isolate) http.Handler {
 			// Read the JavaScript file from disk
 			componentScript, err := os.ReadFile(componentPath)
 			if err != nil {
-				http.Error(w, fmt.Sprintf("Could not read JavaScript file %s", componentPath), http.StatusInternalServerError)
-				return
+				return "", fmt.Errorf("could not read JavaScript file %s", componentPath)
 			}
 
 			// Run the JS file which will load it into context
 			_, err = ctx.RunScript(string(componentScript), componentPath)
 			if err != nil {
-				http.Error(w, fmt.Sprintf("Error executing JavaScript file %s", componentPath), http.StatusInternalServerError)
-				return
+				return "", fmt.Errorf("error executing JavaScript file %s", componentPath)
 			}
 
 			// Run the component render method
 			componentOutput, err := ctx.RunScript(fmt.Sprintf("%s.render({server: true}).html", componentName), "output.js") // return a value in JavaScript back to Go
 			if err != nil {
-				http.Error(w, "Error executing JavaScript function", http.StatusInternalServerError)
-				return
+				return "", fmt.Errorf("error executing JavaScript function")
 			}
 
-			io.WriteString(w, componentOutput.String()); // print output to response writer
-		},
-	)
+			return componentOutput.String(), nil
 }
 
 func (s *FiberServer) RegisterFiberRoutes() {
@@ -71,8 +65,12 @@ func (s *FiberServer) RegisterFiberRoutes() {
 	iso := v8go.NewIsolate() // creates a new JavaScript VM
 
 	s.App.Get("/basic", adaptor.HTTPHandler(templ.Handler(web.Basic())))
+	s.App.Get("/code-only", adaptor.HTTPHandler(templ.Handler(web.CodeOnly("code <strong>only!</strong>"))))
 
-	s.App.Get("/box", adaptor.HTTPHandler(jsHandler(iso)))
+	s.App.Get("/BoxOne", adaptor.HTTPHandler(templteHandler("BoxOne", iso)))
+	s.App.Get("/BoxTwo", adaptor.HTTPHandler(templteHandler("BoxTwo", iso)))
+	s.App.Get("/BoxThree", adaptor.HTTPHandler(templteHandler("BoxThree", iso)))
+	s.App.Get("/not-a-component", adaptor.HTTPHandler(templteHandler("Nope", iso)))
 
 	// blueprint
 

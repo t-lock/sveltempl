@@ -6,6 +6,7 @@ require (
 	github.com/a-h/templ v0.2.747
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/joho/godotenv v1.5.1
+	rogchap.com/v8go v0.9.0
 )
 
 require (
@@ -20,5 +21,4 @@ require (
 	github.com/valyala/fasthttp v1.55.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
-	rogchap.com/v8go v0.9.0 // indirect
 )
