@@ -1,4 +1,4 @@
-# Project templte
+# Project sveltempl
 
 One Paragraph of project description goes here
 

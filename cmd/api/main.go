@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"templte/internal/server"
+	"sveltempl/internal/server"
 
 	_ "github.com/joho/godotenv/autoload"
 )

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"templte/cmd/web"
+	"sveltempl/cmd/web"
 
 	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
@@ -15,16 +15,16 @@ import (
 	"rogchap.com/v8go"
 )
 
-func templteHandler(componentName string, iso *v8go.Isolate) *templ.ComponentHandler {
-	htmlOutput, err := templteRenderToString(componentName, iso)
+func sveltemplHandler(componentName string, iso *v8go.Isolate) *templ.ComponentHandler {
+	htmlOutput, err := sveltemplRenderToString(componentName, iso)
 	if (err != nil) {
-		return templ.Handler(web.TemplteComponent("<p style='color: red'>" + err.Error() + "</p>"))
+		return templ.Handler(web.SvelTemplComponent("<p style='color: red'>" + err.Error() + "</p>"))
 	}
 
-	return templ.Handler(web.TemplteBase(web.TemplteComponent(htmlOutput)))
+	return templ.Handler(web.SvelTemplBase(web.SvelTemplComponent(htmlOutput)))
 }
 
-func templteRenderToString(componentName string, iso *v8go.Isolate) (string, error) {
+func sveltemplRenderToString(componentName string, iso *v8go.Isolate) (string, error) {
 			// Create a new Javascript context
 			ctx := v8go.NewContext(iso)
 
@@ -67,10 +67,10 @@ func (s *FiberServer) RegisterFiberRoutes() {
 	s.App.Get("/basic", adaptor.HTTPHandler(templ.Handler(web.Basic())))
 	s.App.Get("/code-only", adaptor.HTTPHandler(templ.Handler(web.CodeOnly("code <strong>only!</strong>"))))
 
-	s.App.Get("/BoxOne", adaptor.HTTPHandler(templteHandler("BoxOne", iso)))
-	s.App.Get("/BoxTwo", adaptor.HTTPHandler(templteHandler("BoxTwo", iso)))
-	s.App.Get("/BoxThree", adaptor.HTTPHandler(templteHandler("BoxThree", iso)))
-	s.App.Get("/not-a-component", adaptor.HTTPHandler(templteHandler("Nope", iso)))
+	s.App.Get("/BoxOne", adaptor.HTTPHandler(sveltemplHandler("BoxOne", iso)))
+	s.App.Get("/BoxTwo", adaptor.HTTPHandler(sveltemplHandler("BoxTwo", iso)))
+	s.App.Get("/BoxThree", adaptor.HTTPHandler(sveltemplHandler("BoxThree", iso)))
+	s.App.Get("/not-a-component", adaptor.HTTPHandler(sveltemplHandler("Nope", iso)))
 
 	// blueprint
 

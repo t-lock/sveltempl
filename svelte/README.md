@@ -1,4 +1,4 @@
-# The svelte side of Templte
+# The svelte side of SvelTempl
 
 Dev mode:
 ```

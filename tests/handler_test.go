@@ -4,7 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"io"
 	"net/http"
-	"templte/internal/server"
+	"sveltempl/internal/server"
 	"testing"
 )
 

@@ -5,15 +5,15 @@ import (
 	"io"
 )
 
-// A Templte Component is a Templ code-only component with unescaped html passed as its content
-func TemplteComponent(html string) templ.Component {
+// A SvelTempl Component is a Templ code-only component with unescaped html passed as its content
+func SvelTemplComponent(html string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
 		_, err := io.WriteString(w, html)
 		return err
 	})
 }
 
-templ TemplteBase(child templ.Component) {
+templ SvelTemplBase(child templ.Component) {
 	@Base() {
 		@child
 	}

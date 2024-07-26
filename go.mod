@@ -1,4 +1,4 @@
-module templte
+module sveltempl
 
 go 1.22.0
 

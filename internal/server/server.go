@@ -11,8 +11,8 @@ type FiberServer struct {
 func New() *FiberServer {
 	server := &FiberServer{
 		App: fiber.New(fiber.Config{
-			ServerHeader: "templte",
-			AppName:      "templte",
+			ServerHeader: "sveltempl",
+			AppName:      "sveltempl",
 		}),
 	}
 
