@@ -2,20 +2,19 @@ package web
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/a-h/templ"
 	"rogchap.com/v8go"
 )
 
-templ SvelTemplComponent(componentName string, iso *v8go.Isolate) {
-	@svelTemplComponent(componentName, iso)
-}
-
-func svelTemplComponent(componentName string, iso *v8go.Isolate) templ.Component {
-	htmlOutput, err := svelTemplRenderToString(componentName, iso)
+func SvelTemplComponent(componentName string, iso *v8go.Isolate, componentProps []byte) templ.Component {
+	htmlOutput, err := svelTemplRenderToString(componentName, iso, componentProps)
 
 	if err != nil {
 		return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
@@ -30,7 +29,7 @@ func svelTemplComponent(componentName string, iso *v8go.Isolate) templ.Component
 	})
 }
 
-func svelTemplRenderToString(componentName string, iso *v8go.Isolate) (string, error) {
+func svelTemplRenderToString(componentName string, iso *v8go.Isolate, componentProps []byte) (string, error) {
 	// Create a new Javascript context
 	ctx := v8go.NewContext(iso)
 
@@ -57,8 +56,24 @@ func svelTemplRenderToString(componentName string, iso *v8go.Isolate) (string, e
 		return "", fmt.Errorf("error executing JavaScript file %s", componentPath)
 	}
 
+	// Handle props
+	var propsJson string
+	switch {
+	case componentProps == nil:
+		propsJson = "{}"
+	case !json.Valid(componentProps):
+		return "", fmt.Errorf("props must be valid json")
+	default:
+		propsJson = string(componentProps)
+	}
+
+	_, err = ctx.RunScript(fmt.Sprintf(`const props = {server: true, ...JSON.parse('%s')};`, propsJson), "inline scripting")
+	if err != nil {
+		return "", fmt.Errorf("error parsing props")
+	}
+
 	// Run the component render method
-	componentOutput, err := ctx.RunScript(fmt.Sprintf("%s.render({server: true}).html", componentName), "output.js") // return a value in JavaScript back to Go
+	componentOutput, err := ctx.RunScript(fmt.Sprintf("%s.render(props).html", componentName), "output.js") // return a value in JavaScript back to Go
 	if err != nil {
 		return "", fmt.Errorf("error executing JavaScript function")
 	}
