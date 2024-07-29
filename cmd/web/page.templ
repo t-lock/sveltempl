@@ -1,0 +1,20 @@
+package web
+
+import "rogchap.com/v8go"
+
+templ Page(iso *v8go.Isolate) {
+	@Base() {
+		<h1>Page</h1>
+		<div>
+			<a href="/">Home</a>
+		</div>
+		<div class="boxes">
+			<div class="box" id="hash-from-go-vite-aware-2">
+				@SvelTemplComponent("BoxTwo", iso, nil)
+			</div>
+			<div class="box" id="hash-from-go-vite-aware-3">
+				@SvelTemplComponent("BoxThree", iso, nil)
+			</div>
+		</div>
+	}
+}

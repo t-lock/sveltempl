@@ -1,0 +1,24 @@
+package web
+
+import "rogchap.com/v8go"
+
+templ Home(iso *v8go.Isolate) {
+	@Base() {
+		<h1>Home</h1>
+		<div>
+			<a href="/page">Page</a>
+		</div>
+		<div class="boxes">
+			<div class="box" id="hash-from-go-vite-aware-1" data-props={ homeProps() }>
+				@SvelTemplComponent("BoxOne", iso, []byte(homeProps()))
+			</div>
+			<div class="box" id="hash-from-go-vite-aware-2">
+				@SvelTemplComponent("BoxTwo", iso, nil)
+			</div>
+		</div>
+	}
+}
+
+func homeProps() string {
+	return `{"name": "isomorphic props!"}`
+}
