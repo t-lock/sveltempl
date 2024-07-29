@@ -1,3 +1,4 @@
+import type { ComponentType } from "svelte";
 import "./app.css";
 
 const targets = [
@@ -16,12 +17,19 @@ const targets = [
 ];
 
 targets.forEach(({ fileName, id }) => {
-  const domTarget = document.getElementById(id);
-  if (domTarget) {
+  const target = document.getElementById(id);
+  if (target) {
     import(`./lib/${fileName}.svelte`).then((module) => {
-      const Component = module.default;
-      domTarget.innerHTML = "";
-      new Component({ target: domTarget });
+      const Component: ComponentType = module.default;
+
+      const props = JSON.parse(target.dataset.props ?? "{}");
+
+      target.innerHTML = "";
+
+      new Component({
+        target,
+        props,
+      });
     });
   }
 });

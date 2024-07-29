@@ -29,9 +29,6 @@ var BoxOne = (function () {
   function set_current_component(component) {
     current_component = component;
   }
-  function ensure_array_like(array_like_or_iterator) {
-    return (array_like_or_iterator == null ? void 0 : array_like_or_iterator.length) !== void 0 ? array_like_or_iterator : Array.from(array_like_or_iterator);
-  }
   const ATTR_REGEX = /[&"]/g;
   const CONTENT_REGEX = /[&<]/g;
   function escape(value, is_attr = false) {
@@ -47,23 +44,6 @@ var BoxOne = (function () {
       last = i + 1;
     }
     return escaped + str.substring(last);
-  }
-  function each(items, fn) {
-    items = ensure_array_like(items);
-    let str = "";
-    for (let i = 0; i < items.length; i += 1) {
-      str += fn(items[i], i);
-    }
-    return str;
-  }
-  function validate_component(component, name) {
-    if (!component || !component.$$render) {
-      if (name === "svelte:component") name += " this={...}";
-      throw new Error(
-        `<${name}> is not a valid SSR component. You may need to review your build config to ensure that dependencies are compiled, rather than imported as pre-compiled modules. Otherwise you may need to fix a <${name}>.`
-      );
-    }
-    return component;
   }
   let on_destroy;
   function create_ssr_component(fn) {
@@ -150,37 +130,20 @@ var BoxOne = (function () {
   }
   const count = writable(42);
 
-  const PropText = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-    let { text = "default" } = $$props;
-    if ($$props.text === void 0 && $$bindings.text && text !== void 0) $$bindings.text(text);
-    return `<div style="padding-left: 40px">${escape(text)} text</div>`;
-  });
-
-  const SlotText = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-    return `<div style="padding-left: 20px">${slots.default ? slots.default({}) : ``} text</div>`;
-  });
-
   const css = {
-    code: "h2.svelte-50dkni,p.svelte-50dkni{color:orchid}",
-    map: '{"version":3,"file":"BoxOne.svelte","sources":["BoxOne.svelte"],"sourcesContent":["<script lang=\\"ts\\">import { count } from \\"./count\\";\\nimport PropText from \\"./PropText.svelte\\";\\nimport SlotText from \\"./SlotText.svelte\\";\\nfunction handleClick() {\\n  $count++;\\n}\\nexport let server = false;\\nlet ideas = [\\"shitty\\", \\"sucky\\", \\"swell\\", \\"super\\"];\\n<\/script>\\n\\n<h2>\\n  Box One\\n  <span class:server class:hydrated={!server}>\\n    [{server ? \\"server\\" : \\"hydrated\\"}]\\n  </span>\\n</h2>\\n<p>I render global state from a store</p>\\n<p>The global count is {$count}</p>\\n<button on:click={handleClick}>Increase global</button>\\n\\n<div class=\\"flex flex-col gap-5\\">\\n  {#each ideas as idea, i}\\n    {@const even = i % 2 === 0}\\n    {#if even}\\n      <PropText text={idea} />\\n    {:else}\\n      <SlotText>{idea}</SlotText>\\n    {/if}\\n  {/each}\\n</div>\\n\\n<style>\\n  h2, p {\\n    color: orchid;\\n  }\\n</style>\\n"],"names":[],"mappings":"AAgCE,gBAAE,CAAE,eAAE,CACJ,KAAK,CAAE,MACT"}'
+    code: "h2.svelte-1shgoz0,p.svelte-1shgoz0{color:orchid}",
+    map: '{"version":3,"file":"BoxOne.svelte","sources":["BoxOne.svelte"],"sourcesContent":["<script lang=\\"ts\\">import { count } from \\"./count\\";\\nfunction handleClick() {\\n  $count++;\\n}\\nexport let server = false;\\nexport let name = \\"One\\";\\n<\/script>\\n\\n<h2>\\n  Box {name}\\n  <span class:server class:hydrated={!server}>\\n    [{server ? \\"server\\" : \\"hydrated\\"}]\\n  </span>\\n</h2>\\n<p>I render global state from a store</p>\\n<p>The global count is {$count}</p>\\n<button on:click={handleClick}>Increase global</button>\\n\\n<style>\\n  h2,\\n  p {\\n    color: orchid;\\n  }\\n</style>\\n"],"names":[],"mappings":"AAmBE,iBAAE,CACF,gBAAE,CACA,KAAK,CAAE,MACT"}'
   };
   const BoxOne = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     let $count, $$unsubscribe_count;
     $$unsubscribe_count = subscribe(count, (value) => $count = value);
     let { server = false } = $$props;
-    let ideas = ["shitty", "sucky", "swell", "super"];
+    let { name = "One" } = $$props;
     if ($$props.server === void 0 && $$bindings.server && server !== void 0) $$bindings.server(server);
+    if ($$props.name === void 0 && $$bindings.name && name !== void 0) $$bindings.name(name);
     $$result.css.add(css);
     $$unsubscribe_count();
-    return `<h2 class="svelte-50dkni">Box One
-  <span${add_classes(((server ? "server" : "") + " " + (!server ? "hydrated" : "")).trim())}>[${escape(server ? "server" : "hydrated")}]</span></h2> <p class="svelte-50dkni">I render global state from a store</p> <p class="svelte-50dkni">The global count is ${escape($count)}</p> <button>Increase global</button> <div class="flex flex-col gap-5">${each(ideas, (idea, i) => {
-    let even = i % 2 === 0;
-    return ` ${even ? `${validate_component(PropText, "PropText").$$render($$result, { text: idea }, {}, {})}` : `${validate_component(SlotText, "SlotText").$$render($$result, {}, {}, {
-      default: () => {
-        return `${escape(idea)}`;
-      }
-    })}`}`;
-  })} </div>`;
+    return `<h2 class="svelte-1shgoz0">Box ${escape(name)} <span${add_classes(((server ? "server" : "") + " " + (!server ? "hydrated" : "")).trim())}>[${escape(server ? "server" : "hydrated")}]</span></h2> <p class="svelte-1shgoz0">I render global state from a store</p> <p class="svelte-1shgoz0">The global count is ${escape($count)}</p> <button>Increase global</button>`;
   });
 
   return BoxOne;

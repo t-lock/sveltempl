@@ -5,12 +5,15 @@ templ Base() {
 	<html lang="en">
 		<head>
 			<meta charset="utf-8"/>
-			<title>Go Blueprint Hello</title>
-            <link href="assets/css/output.css" rel="stylesheet"/>
+			<title>SvelTemple - POC</title>
+			<link href="assets/css/output.css" rel="stylesheet"/>
 			<script src="assets/js/htmx.min.js"></script>
+			<script type="module" crossorigin src="/assets/main-CZamz8yB.js"></script>
+			<link rel="stylesheet" crossorigin href="/assets/main-D7BREWbd.css"/>
 		</head>
 		<body>
-			<main>
+			<main id="app">
+				<h1 class="mb-10">svelTempl</h1>
 				{ children... }
 			</main>
 		</body>

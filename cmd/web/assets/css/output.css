@@ -554,6 +554,10 @@ video {
   --tw-contain-style:  ;
 }
 
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
+
 .border {
   border-width: 1px;
 }

@@ -23,11 +23,9 @@ func (s *FiberServer) RegisterFiberRoutes() {
 	s.App.Get("/boxthree", adaptor.HTTPHandler(templ.Handler(web.SvelTemplComponent("BoxThree", iso, nil))))
 	s.App.Get("/not-a-component", adaptor.HTTPHandler(templ.Handler(web.SvelTemplComponent("Nope", iso, nil))))
 	s.App.Get("/props", adaptor.HTTPHandler(templ.Handler(web.PropsExample(iso))))
+	s.App.Get("/", adaptor.HTTPHandler(templ.Handler(web.PageOne(iso))))
 
 	// blueprint
-
-	s.App.Get("/", s.HelloWorldHandler)
-
 	s.App.Use("/assets", filesystem.New(filesystem.Config{
 		Root:       http.FS(web.Files),
 		PathPrefix: "assets",
