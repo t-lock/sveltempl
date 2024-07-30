@@ -1,8 +1,6 @@
 package web
 
-import "rogchap.com/v8go"
-
-templ Page(iso *v8go.Isolate) {
+templ Page() {
 	@Base() {
 		<h1>Page</h1>
 		<div>
@@ -10,10 +8,10 @@ templ Page(iso *v8go.Isolate) {
 		</div>
 		<div class="boxes">
 			<div class="box" id="hash-from-go-vite-aware-2">
-				@SvelTemplComponent("BoxTwo", iso, nil)
+				@SvelTemplComponent("BoxTwo", nil)
 			</div>
 			<div class="box" id="hash-from-go-vite-aware-3">
-				@SvelTemplComponent("BoxThree", iso, nil)
+				@SvelTemplComponent("BoxThree", nil)
 			</div>
 		</div>
 	}

@@ -8,12 +8,15 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-
-	"github.com/a-h/templ"
 	"rogchap.com/v8go"
+	v8 "sveltempl/internal/v8"
 )
 
-func SvelTemplComponent(componentName string, iso *v8go.Isolate, componentProps []byte) templ.Component {
+templ SvelTemplComponent(componentName string, componentProps []byte) {
+	@svelTemplComponent(v8.GetV8Context(ctx), componentName, componentProps)
+}
+
+func svelTemplComponent(iso *v8go.Isolate, componentName string, componentProps []byte) templ.Component {
 	htmlOutput, err := svelTemplRenderToString(componentName, iso, componentProps)
 
 	if err != nil {
@@ -67,7 +70,7 @@ func svelTemplRenderToString(componentName string, iso *v8go.Isolate, componentP
 		propsJson = string(componentProps)
 	}
 
-	_, err = ctx.RunScript(fmt.Sprintf(`const props = {server: true, ...JSON.parse('%s')};`, propsJson), "inline scripting")
+	_, err = ctx.RunScript(fmt.Sprintf(`const props = {server: true, ...JSON.parse('%s')};`, propsJson), "props.js")
 	if err != nil {
 		return "", fmt.Errorf("error parsing props")
 	}

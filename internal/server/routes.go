@@ -3,21 +3,22 @@ package server
 import (
 	"net/http"
 	"sveltempl/cmd/web"
+	v8 "sveltempl/internal/v8"
 
 	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"rogchap.com/v8go"
 )
 
 func (s *FiberServer) RegisterFiberRoutes() {
-	// creates a new JavaScript VM
-	iso := v8go.NewIsolate() // creates a new JavaScript VM
+	// create a new JavaScript VM and expose it via middleware/context to all routes
+	iso := v8go.NewIsolate()
+	s.App.Use(v8.V8Middleware(iso))
 
 	// routes
-	s.App.Get("/", adaptor.HTTPHandler(templ.Handler(web.Home(iso))))
-	s.App.Get("/page", adaptor.HTTPHandler(templ.Handler(web.Page(iso))))
+	s.App.Get("/", svelTemplHandler(web.Home()))
+	s.App.Get("/page", svelTemplHandler(web.Page()))
 
 	// blueprint assets
 	s.App.Use("/assets", filesystem.New(filesystem.Config{
@@ -27,10 +28,17 @@ func (s *FiberServer) RegisterFiberRoutes() {
 	}))
 }
 
-func (s *FiberServer) HelloWorldHandler(c *fiber.Ctx) error {
-	resp := fiber.Map{
-		"message": "Hello World",
-	}
 
-	return c.JSON(resp)
+// custom handler exposes templ render function so that I can get ctx into it
+// ? this might be a hack and likely not the best way to do this
+func svelTemplHandler(component templ.Component) func(*fiber.Ctx) error {
+    return func(c *fiber.Ctx) error {
+			c.Set(fiber.HeaderContentType, fiber.MIMETextHTMLCharsetUTF8)
+
+			ctx := c.UserContext()
+			w := c.Response().BodyWriter()
+
+			component.Render(ctx, w)
+			return nil
+    }
 }
