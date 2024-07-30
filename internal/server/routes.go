@@ -7,6 +7,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"rogchap.com/v8go"
 )
@@ -19,6 +20,7 @@ func (s *FiberServer) RegisterFiberRoutes() {
 	// routes
 	s.App.Get("/", svelTemplHandler(web.Home()))
 	s.App.Get("/page", svelTemplHandler(web.Page()))
+	s.App.Get("/no-svelte", adaptor.HTTPHandler(templ.Handler(web.NoSvelte())))
 
 	// blueprint assets
 	s.App.Use("/assets", filesystem.New(filesystem.Config{
