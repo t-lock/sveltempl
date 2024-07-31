@@ -8,10 +8,10 @@ templ Home() {
 		</div>
 		<div class="boxes">
 			<div class="box" id="hash-from-go-vite-aware-1" data-props={ homeProps() }>
-				@SvelTemplComponent("BoxOne", []byte(homeProps()))
+				@Svelte("BoxOne", []byte(homeProps()))
 			</div>
 			<div class="box" id="hash-from-go-vite-aware-2">
-				@SvelTemplComponent("BoxTwo", nil)
+				@Svelte("BoxTwo", nil)
 			</div>
 		</div>
 	}

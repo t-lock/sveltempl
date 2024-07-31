@@ -12,7 +12,7 @@ import (
 	v8 "sveltempl/internal/v8"
 )
 
-templ SvelTemplComponent(componentName string, componentProps []byte) {
+templ Svelte(componentName string, componentProps []byte) {
 	@svelTemplComponent(v8.GetV8Context(ctx), componentName, componentProps)
 }
 
