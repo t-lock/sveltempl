@@ -76,7 +76,10 @@ func svelTemplRenderToString(componentName string, iso *v8go.Isolate, componentP
 	}
 
 	// Run the component render method
-	componentOutput, err := ctx.RunScript(fmt.Sprintf("%s.render(props).html", componentName), "output.js") // return a value in JavaScript back to Go
+	componentOutput, err := ctx.RunScript(fmt.Sprintf(`
+		const { html, css: { code: css } } = %s.render(props);
+		(html + "<style>" + css + "</style>")
+	`, componentName), "output.js") // return a value in JavaScript back to Go
 	if err != nil {
 		return "", fmt.Errorf("error executing JavaScript function")
 	}
