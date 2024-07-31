@@ -2,21 +2,20 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"strconv"
-	"sveltempl/internal/server"
+	"net/http"
+	"sveltempl/cmd/web"
 
-	_ "github.com/joho/godotenv/autoload"
+	"github.com/a-h/templ"
 )
 
 func main() {
+		http.Handle("/", templ.Handler(web.Home()))
+		http.Handle("/page", templ.Handler(web.Page()))
+		http.Handle("/no-svelte", templ.Handler(web.NoSvelte()))
 
-	server := server.New()
+		fileServer := http.FileServer(http.FS(web.Files))
+		http.Handle("/assets/", fileServer)
 
-	server.RegisterFiberRoutes()
-	port, _ := strconv.Atoi(os.Getenv("PORT"))
-	err := server.Listen(fmt.Sprintf(":%d", port))
-	if err != nil {
-		panic(fmt.Sprintf("cannot start server: %s", err))
-	}
+		fmt.Println("Listening on :8080")
+		http.ListenAndServe(":8080", nil)
 }

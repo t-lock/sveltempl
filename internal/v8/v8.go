@@ -3,7 +3,6 @@ package v8
 import (
 	"context"
 
-	"github.com/gofiber/fiber/v2"
 	"rogchap.com/v8go"
 )
 
@@ -15,12 +14,4 @@ func GetV8Context(ctx context.Context) *v8go.Isolate {
 		return iso
 	}
 	return nil
-}
-
-func V8Middleware(iso *v8go.Isolate) fiber.Handler {
-	  return func(c *fiber.Ctx) error {
-        ctx := context.WithValue(c.UserContext(), V8ContextKey, iso)
-        c.SetUserContext(ctx)
-        return c.Next()
-    }
 }
