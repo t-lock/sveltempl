@@ -3,54 +3,38 @@
   import { dndzone } from "svelte-dnd-action";
   import { flip } from "svelte/animate";
 
-  const colors = ["#75ADC7", "#85C49B", "#E0B386", "#D48D98", "#FFF099"];
+  type Board = Col[];
 
-  let board = [
-    {
-      id: 1,
-      name: "TODO",
-      items: [
-        { id: 41, name: "item41", color: colors[0] },
-        { id: 42, name: "item42", color: colors[1] },
-        { id: 43, name: "item43", color: colors[2] },
-        { id: 44, name: "item44", color: colors[3] },
-        { id: 45, name: "item45", color: colors[4] },
-        { id: 46, name: "item46", color: colors[0] },
-        { id: 47, name: "item47", color: colors[1] },
-        { id: 48, name: "item48", color: colors[2] },
-        { id: 49, name: "item49", color: colors[3] },
-      ],
-    },
-    {
-      id: 2,
-      name: "DOING",
-      items: [],
-    },
-    {
-      id: 3,
-      name: "DONE",
-      items: [],
-    },
-  ];
+  type Col = {
+    id: number;
+    name: string;
+    items: Item[];
+  };
 
-  let columnItems = board;
+  type Item = {
+    id: number;
+    name: string;
+    color: string;
+  };
+
+  export let board: Board = [];
 
   const flipDurationMs = 200;
   function handleDndConsiderColumns(e: any) {
-    columnItems = e.detail.items;
+    board = e.detail.items;
   }
   function handleDndFinalizeColumns(e: any) {
-    columnItems = e.detail.items;
+    board = e.detail.items;
   }
   function handleDndConsiderCards(cid: any, e: any) {
-    const colIdx = columnItems.findIndex((c) => c.id === cid);
-    columnItems[colIdx].items = e.detail.items;
-    columnItems = [...columnItems];
+    const colIdx = board.findIndex((c) => c.id === cid);
+    board[colIdx].items = e.detail.items;
+    board = [...board];
   }
   function handleDndFinalizeCards(cid: any, e: any) {
-    const colIdx = columnItems.findIndex((c) => c.id === cid);
-    columnItems[colIdx].items = e.detail.items;
-    columnItems = [...columnItems];
+    const colIdx = board.findIndex((c) => c.id === cid);
+    board[colIdx].items = e.detail.items;
+    board = [...board];
   }
 </script>
 
@@ -58,11 +42,11 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <section
   class="board"
-  use:dndzone={{ items: columnItems, flipDurationMs, type: "columns" }}
+  use:dndzone={{ items: board, flipDurationMs, type: "columns" }}
   on:consider={handleDndConsiderColumns}
   on:finalize={handleDndFinalizeColumns}
 >
-  {#each columnItems as column (column.id)}
+  {#each board as column (column.id)}
     <div class="column" animate:flip={{ duration: flipDurationMs }}>
       <div class="column-title">{column.name}</div>
       <div

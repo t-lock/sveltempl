@@ -13,7 +13,9 @@ import (
 )
 
 templ Svelte(componentName string, componentProps []byte) {
-	@svelTemplComponent(v8.GetV8Context(ctx), componentName, componentProps)
+	<div style="display: contents" id={ componentName }>
+		@svelTemplComponent(v8.GetV8Context(ctx), componentName, componentProps)
+	</div>
 }
 
 func svelTemplComponent(iso *v8go.Isolate, componentName string, componentProps []byte) templ.Component {
@@ -26,8 +28,13 @@ func svelTemplComponent(iso *v8go.Isolate, componentName string, componentProps 
 		})
 	}
 
+	propScript := ""
+	if componentProps != nil {
+		propScript = `<script type="application/json">` + string(componentProps) + "</script>\n"
+	}
+
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
-		_, err := io.WriteString(w, htmlOutput)
+		_, err := io.WriteString(w, propScript+htmlOutput)
 		return err
 	})
 }

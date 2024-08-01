@@ -563,6 +563,10 @@ video {
   display: flex;
 }
 
+.contents {
+  display: contents;
+}
+
 .justify-center {
   justify-content: center;
 }

@@ -5,16 +5,16 @@ templ Home() {
 		<h1>Home</h1>
 		@Nav()
 		<div class="boxes">
-			<div class="box" id="hash-from-go-vite-aware-1" data-props={ homeProps() }>
+			<div class="box">
 				@Svelte("BoxOne", []byte(homeProps()))
 			</div>
-			<div class="box" id="hash-from-go-vite-aware-2">
+			<div class="box">
 				@Svelte("BoxTwo", nil)
 			</div>
 		</div>
 	}
 }
 
-func homeProps() string {
-	return `{"name": "isomorphic props!"}`
+func homeProps() []byte {
+	return []byte(`{"name": "isomorphic props!"}`)
 }
