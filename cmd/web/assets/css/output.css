@@ -553,3 +553,20 @@ video {
   --tw-contain-paint:  ;
   --tw-contain-style:  ;
 }
+
+.my-5 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.gap-5 {
+  gap: 1.25rem;
+}

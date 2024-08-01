@@ -14,6 +14,10 @@ const targets = [
     fileName: "BoxThree",
     id: "hash-from-go-vite-aware-3",
   },
+  {
+    fileName: "TrelloClone",
+    id: "trello-clone",
+  },
 ];
 
 targets.forEach(({ fileName, id }) => {

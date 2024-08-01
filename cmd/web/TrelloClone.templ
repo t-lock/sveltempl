@@ -1,0 +1,11 @@
+package web
+
+templ TrelloClone() {
+	@Base() {
+		<h1>Home</h1>
+		@Nav()
+		<div id="trello-clone">
+			@Svelte("TrelloClone", nil)
+		</div>
+	}
+}

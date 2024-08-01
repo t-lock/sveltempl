@@ -3,9 +3,7 @@ package web
 templ Page() {
 	@Base() {
 		<h1>Page</h1>
-		<div>
-			<a href="/">Home</a>
-		</div>
+		@Nav()
 		<div class="boxes">
 			<div class="box" id="hash-from-go-vite-aware-2">
 				@Svelte("BoxTwo", nil)

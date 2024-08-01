@@ -3,9 +3,7 @@ package web
 templ Home() {
 	@Base() {
 		<h1>Home</h1>
-		<div>
-			<a href="/page">Page</a>
-		</div>
+		@Nav()
 		<div class="boxes">
 			<div class="box" id="hash-from-go-vite-aware-1" data-props={ homeProps() }>
 				@Svelte("BoxOne", []byte(homeProps()))
