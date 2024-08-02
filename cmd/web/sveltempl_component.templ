@@ -12,6 +12,17 @@ import (
 	v8 "sveltempl/internal/v8"
 )
 
+type components map[string]string
+
+// TODO make type-safe in a way that provides IDE completions
+// TODO code-gen this from Vite
+var componentMap = components{
+	"BoxOne":      "/assets/svelte/BoxOne-DhYVVjlR.js",
+	"BoxTwo":      "/assets/svelte/BoxTwo-DQX7MQTX.js",
+	"BoxThree":    "/assets/svelte/BoxThree-CRDtwcGO.js",
+	"TrelloClone": "/assets/svelte/TrelloClone-C7zW6e2i.js",
+}
+
 templ Svelte(componentName string, componentProps []byte) {
 	<div style="display: contents" id={ componentName }>
 		@svelTemplComponent(v8.GetV8Context(ctx), componentName, componentProps)
@@ -34,9 +45,35 @@ func svelTemplComponent(iso *v8go.Isolate, componentName string, componentProps 
 	}
 
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
-		_, err := io.WriteString(w, propScript+htmlOutput)
+		_, err := io.WriteString(w, propScript+htmlOutput+hydrationScript(componentName))
 		return err
 	})
+}
+
+// TODO most of this can be re-used, the only dynamic part is getting the Component class and target element
+func hydrationScript(componentName string) string {
+	csrPath := componentMap[componentName]
+	return fmt.Sprintf(`
+		<script type="module">
+			import("%s").then((module) => {
+				const Component = module.default;
+				const target = document.getElementById("%s");
+
+				let props = {};
+
+				if (target.firstElementChild?.tagName === "SCRIPT") {
+					props = JSON.parse(target.firstElementChild.textContent ?? "{}");
+				}
+
+				target.innerHTML = "";
+
+				new Component({
+					target,
+					props,
+				});
+			})
+		</script>
+	`, csrPath, componentName)
 }
 
 func svelTemplRenderToString(componentName string, iso *v8go.Isolate, componentProps []byte) (string, error) {
