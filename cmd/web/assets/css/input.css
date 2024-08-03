@@ -7,10 +7,12 @@
   gap: 20px;
   margin-top: 20px;
 }
+.box {
+  border: 1px solid #6b6b6b;
+  padding: 20px;
+}
 .boxes .box {
   flex-basis: 50%;
-  border: 1px solid black;
-  padding: 20px;
 }
 .server {
   background-color: steelblue;

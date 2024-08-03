@@ -16,7 +16,7 @@ type components map[string]string
 
 // TODO make type-safe in a way that provides IDE completions
 // TODO code-gen this from Vite
-var componentMap = components{
+var ComponentMap = components{
 	"BoxOne":      "/assets/svelte/BoxOne-DhYVVjlR.js",
 	"BoxTwo":      "/assets/svelte/BoxTwo-DQX7MQTX.js",
 	"BoxThree":    "/assets/svelte/BoxThree-CRDtwcGO.js",
@@ -52,7 +52,7 @@ func svelTemplComponent(iso *v8go.Isolate, componentName string, componentProps 
 
 // TODO most of this can be re-used, the only dynamic part is getting the Component class and target element
 func hydrationScript(componentName string) string {
-	csrPath := componentMap[componentName]
+	csrPath := ComponentMap[componentName]
 	return fmt.Sprintf(`
 		<script type="module">
 			import("%s").then((module) => {

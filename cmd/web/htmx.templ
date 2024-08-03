@@ -1,0 +1,22 @@
+package web
+
+templ HTMX() {
+	@Base() {
+		<h1>HTMX Example</h1>
+		@Nav()
+		<div class="box max-w-3xl flex flex-col gap-4">
+			<p>Sveltempl works OOTB with HTMX, because each server-rendered component instance includes its own inline es module which imports the code-split compiled client component script -- We don't need to monitor changes or run event-driven code to hydrate any new components that come in asynchronously, <em>hydration just works, automatically</em>.</p>
+			<p class="text-gray-400">
+				<em><strong class="text-yellow-400">* Technically though</strong>, we've already demonstrated this because the entire site navigation is clientside using HTMX <code>hx-boost</code> attribute.</em>
+			</p>
+		</div>
+		<div class="flex items-center gap-3 mt-5 justify-center">
+			@button("Fetch a random component (SSR'd and hydrated)")
+		</div>
+		<div class="mt-5" id="random-component"></div>
+	}
+}
+
+templ button(text string) {
+	<button hx-post="/htmx" hx-target="#random-component">{ text }</button>
+}
