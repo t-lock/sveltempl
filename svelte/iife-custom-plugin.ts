@@ -11,7 +11,7 @@ export default function iifeBundle(options: Options = {}): Plugin {
   const { outputDir = "dist-ssr-go", inputDir = "dist-ssr" } = options;
 
   return {
-    name: "vite-plugin-iife-bundle",
+    name: "sveltempl-iife-bundle",
     apply: "build",
     async writeBundle() {
       // Clear the output directory

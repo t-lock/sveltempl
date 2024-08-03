@@ -15,7 +15,7 @@
     [{server ? "server" : "hydrated"}]
   </span>
 </h2>
-<p>I render global state from a store</p>
+<p>I render global state from a store.</p>
 <p>The global count is {$count}</p>
 <button on:click={handleClick}>Increase global</button>
 

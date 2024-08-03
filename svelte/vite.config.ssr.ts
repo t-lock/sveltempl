@@ -2,7 +2,7 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { readdirSync, statSync } from "fs";
 import { basename, join, resolve } from "path";
 import { defineConfig } from "vite";
-import iifeBundle from "./plugin";
+import iifeBundle from "./iife-custom-plugin";
 
 function getAllSvelteComponents(dir: string, fileList: string[] = []) {
   const files = readdirSync(dir);

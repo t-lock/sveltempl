@@ -132,7 +132,7 @@ var BoxOne = (function () {
 
   const css = {
     code: "h2.svelte-1shgoz0,p.svelte-1shgoz0{color:orchid}",
-    map: '{"version":3,"file":"BoxOne.svelte","sources":["BoxOne.svelte"],"sourcesContent":["<script lang=\\"ts\\">import { count } from \\"./count\\";\\nfunction handleClick() {\\n  $count++;\\n}\\nexport let server = false;\\nexport let name = \\"One\\";\\n<\/script>\\n\\n<h2>\\n  Box {name}\\n  <span class:server class:hydrated={!server}>\\n    [{server ? \\"server\\" : \\"hydrated\\"}]\\n  </span>\\n</h2>\\n<p>I render global state from a store</p>\\n<p>The global count is {$count}</p>\\n<button on:click={handleClick}>Increase global</button>\\n\\n<style>\\n  h2,\\n  p {\\n    color: orchid;\\n  }\\n</style>\\n"],"names":[],"mappings":"AAmBE,iBAAE,CACF,gBAAE,CACA,KAAK,CAAE,MACT"}'
+    map: '{"version":3,"file":"BoxOne.svelte","sources":["BoxOne.svelte"],"sourcesContent":["<script lang=\\"ts\\">import { count } from \\"./count\\";\\nfunction handleClick() {\\n  $count++;\\n}\\nexport let server = false;\\nexport let name = \\"One\\";\\n<\/script>\\n\\n<h2>\\n  Box {name}\\n  <span class:server class:hydrated={!server}>\\n    [{server ? \\"server\\" : \\"hydrated\\"}]\\n  </span>\\n</h2>\\n<p>I render global state from a store.</p>\\n<p>The global count is {$count}</p>\\n<button on:click={handleClick}>Increase global</button>\\n\\n<style>\\n  h2,\\n  p {\\n    color: orchid;\\n  }\\n</style>\\n"],"names":[],"mappings":"AAmBE,iBAAE,CACF,gBAAE,CACA,KAAK,CAAE,MACT"}'
   };
   const BoxOne = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     let $count, $$unsubscribe_count;
@@ -143,7 +143,7 @@ var BoxOne = (function () {
     if ($$props.name === void 0 && $$bindings.name && name !== void 0) $$bindings.name(name);
     $$result.css.add(css);
     $$unsubscribe_count();
-    return `<h2 class="svelte-1shgoz0">Box ${escape(name)} <span${add_classes(((server ? "server" : "") + " " + (!server ? "hydrated" : "")).trim())}>[${escape(server ? "server" : "hydrated")}]</span></h2> <p class="svelte-1shgoz0">I render global state from a store</p> <p class="svelte-1shgoz0">The global count is ${escape($count)}</p> <button>Increase global</button>`;
+    return `<h2 class="svelte-1shgoz0">Box ${escape(name)} <span${add_classes(((server ? "server" : "") + " " + (!server ? "hydrated" : "")).trim())}>[${escape(server ? "server" : "hydrated")}]</span></h2> <p class="svelte-1shgoz0">I render global state from a store.</p> <p class="svelte-1shgoz0">The global count is ${escape($count)}</p> <button>Increase global</button>`;
   });
 
   return BoxOne;
