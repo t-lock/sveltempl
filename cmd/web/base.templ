@@ -1,5 +1,11 @@
 package web
 
+import "sveltempl/internal/sveltempl"
+
+templ Svelte(componentName string, componentProps []byte) {
+	@sveltempl.Component(componentName, componentProps)
+}
+
 templ Base() {
 	<!DOCTYPE html>
 	<html lang="en">

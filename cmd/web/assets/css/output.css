@@ -571,10 +571,6 @@ video {
   display: flex;
 }
 
-.contents {
-  display: contents;
-}
-
 .max-w-3xl {
   max-width: 48rem;
 }
