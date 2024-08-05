@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/google/uuid"
 	"io"
 	"log"
 	"os"
@@ -12,13 +13,22 @@ import (
 	"sveltempl/internal/codegen"
 )
 
+// Mutable var for storing the current id
+// (gets updated on each top-level component wrapper, then passed in to internals)
+var idGlobal string
+
+func setAndReturnUniqId() string {
+	idGlobal = uuid.NewString()
+	return idGlobal
+}
+
 templ Component(componentName string, componentProps []byte) {
-	<div style="display: contents" id={ componentName }>
-		@svelTemplComponent(GetV8Context(ctx), componentName, componentProps)
+	<div style="display: contents" id={ componentName + "-" + setAndReturnUniqId() }>
+		@svelTemplComponent(GetV8Context(ctx), componentName, idGlobal, componentProps)
 	</div>
 }
 
-func svelTemplComponent(iso *v8go.Isolate, componentName string, componentProps []byte) templ.Component {
+func svelTemplComponent(iso *v8go.Isolate, componentName string, internalId string, componentProps []byte) templ.Component {
 	htmlOutput, err := svelTemplRenderToString(componentName, iso, componentProps)
 
 	if err != nil {
@@ -34,19 +44,19 @@ func svelTemplComponent(iso *v8go.Isolate, componentName string, componentProps 
 	}
 
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
-		_, err := io.WriteString(w, propScript+htmlOutput+hydrationScript(componentName))
+		_, err := io.WriteString(w, propScript+htmlOutput+hydrationScript(componentName, internalId))
 		return err
 	})
 }
 
 // TODO most of this can be re-used, the only dynamic part is getting the Component class and target element
-func hydrationScript(componentName string) string {
+func hydrationScript(componentName string, internalId string) string {
 	csrPath := codegen.ComponentMap[componentName]
 	return fmt.Sprintf(`
 		<script type="module">
 			import("%s").then((module) => {
 				const Component = module.default;
-				const target = document.getElementById("%s");
+				const target = document.getElementById("%s-%s");
 
 				let props = {};
 
@@ -62,7 +72,7 @@ func hydrationScript(componentName string) string {
 				});
 			})
 		</script>
-	`, csrPath, componentName)
+	`, csrPath, componentName, internalId)
 }
 
 func svelTemplRenderToString(componentName string, iso *v8go.Isolate, componentProps []byte) (string, error) {
