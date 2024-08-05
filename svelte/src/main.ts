@@ -1,3 +1,2 @@
-const targets = ["BoxOne", "BoxTwo", "BoxThree", "TrelloClone"];
-
-targets.forEach((name) => import(`./lib/${name}.svelte`));
+// ! why on earth does this work?
+[].forEach((name) => import(`./lib/${name}.svelte`));
