@@ -1,13 +1,39 @@
 package codegen
 
-type components map[string]string
+import (
+	"fmt"
+	"log"
+	"os"
+	"path/filepath"
+	"strings"
+)
 
 // TODO make type-safe in a way that provides IDE completions
-// TODO code-gen this from Vite
-var ComponentMap = components{
-	"BoxOne":      "/assets/svelte/BoxOne-ChCQd1fF.js",
-	"BoxTwo":      "/assets/svelte/BoxTwo-OxeorExc.js",
-	"BoxThree":    "/assets/svelte/BoxThree-Dpo3Zmv3.js",
-	"TrelloClone": "/assets/svelte/TrelloClone-CoVDvw8L.js",
-	"ModeBox":     "/assets/svelte/ModeBox-2QUe6kcN.js",
+type components map[string]string
+
+var ComponentMap = populateComponentMap("cmd/web/assets/svelte/")
+
+func populateComponentMap(dir string) components {
+	compMap := make(components)
+
+	files, err := os.ReadDir(dir)
+	if err != nil {
+		log.Fatalf("Failed to read directory: %v", err)
+	}
+
+	for _, file := range files {
+		if !file.IsDir() {
+			filename := file.Name()
+			parts := strings.SplitN(filename, "-", 2)
+			if len(parts) == 2 {
+				key := parts[0]
+				value := filepath.Join(dir, filename)
+				compMap[key] = strings.TrimPrefix(value, "cmd/web")
+			} else {
+				fmt.Printf("Skipping file with unexpected name format: %s\n", filename)
+			}
+		}
+	}
+
+	return compMap
 }
