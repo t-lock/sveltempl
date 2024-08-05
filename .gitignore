@@ -1,3 +1,6 @@
+# Svelte built files
+/cmd/web/assets/svelte
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
