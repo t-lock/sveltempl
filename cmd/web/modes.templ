@@ -1,0 +1,32 @@
+package web
+
+templ Modes() {
+	@Base() {
+		<h1>Rendering Modes</h1>
+		@Nav()
+		<div class="max-w-3xl">
+			<div class="box mb-5 flex flex-col gap-5">
+				<p>By default, Svelte components are rendered on the server and hydrated on the client.</p>
+				<p>To render only on the client (perhaps becuase you are using a 3rd party library that uses browser globals in its initialization script, and therefor cannot be SSR'd) you can just pass in <span class="bg-slate-600 p-1 rounded-sm">mode: "csr"</span>.</p>
+				<p>To server-render something without hyrdration, just don't call a Svelte component from your Go Templ component</p>
+				<p class="text-gray-400">
+					<em><strong class="text-yellow-400">*Tip:</strong> Try loading this page with Javascript disabled and compare the rendered output.</em>
+				</p>
+			</div>
+			<div class="flex gap-5">
+				<div class="basis-1/3">
+					// shamelessly copy the svelte class in here (you wouldn't do this in prod)
+					<div style="background-color: #75ADC7" class="svelte-1qt8str">
+						SSR Only
+					</div>
+				</div>
+				<div class="basis-1/3">
+					@Svelte("ModeBox", []byte(`{"text": "SSR + Hydration"}`))
+				</div>
+				<div class="basis-1/3">
+					@Svelte("ModeBox", []byte(`{"text": "CSR Only"}`), Options{"mode": "csr"})
+				</div>
+			</div>
+		</div>
+	}
+}

@@ -20,6 +20,7 @@ func getRandomComponent() templ.Component {
 		Svelte("BoxOne", nil),
 		Svelte("BoxTwo", nil),
 		Svelte("BoxThree", nil),
+		Svelte("ModeBox", []byte(`{"text": "I got picked randomly!"}`)),
 	}
 
 	return components[rand.Intn(len(components))]

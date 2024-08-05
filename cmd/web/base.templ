@@ -2,8 +2,10 @@ package web
 
 import "sveltempl/internal/sveltempl"
 
-templ Svelte(componentName string, componentProps []byte) {
-	@sveltempl.Component(componentName, componentProps)
+type Options = sveltempl.Options
+
+templ Svelte(componentName string, componentProps []byte, opts ...Options) {
+	@sveltempl.Component(componentName, componentProps, opts...)
 }
 
 templ Base() {

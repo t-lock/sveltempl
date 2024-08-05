@@ -13,6 +13,8 @@ import (
 	"sveltempl/internal/codegen"
 )
 
+type Options map[string]any
+
 // Mutable var for storing the current id
 // (gets updated on each top-level component wrapper, then passed in to internals)
 var idGlobal string
@@ -22,14 +24,30 @@ func setAndReturnUniqId() string {
 	return idGlobal
 }
 
-templ Component(componentName string, componentProps []byte) {
+templ Component(componentName string, componentProps []byte, opts ...Options) {
 	<div style="display: contents" id={ componentName + "-" + setAndReturnUniqId() }>
-		@svelTemplComponent(GetV8Context(ctx), componentName, idGlobal, componentProps)
+		@svelTemplComponent(GetV8Context(ctx), componentName, idGlobal, componentProps, opts...)
 	</div>
 }
 
-func svelTemplComponent(iso *v8go.Isolate, componentName string, internalId string, componentProps []byte) templ.Component {
-	htmlOutput, err := svelTemplRenderToString(componentName, iso, componentProps)
+func svelTemplComponent(iso *v8go.Isolate, componentName string, internalId string, componentProps []byte, opts ...Options) templ.Component {
+	var htmlOutput string
+	var err error
+
+	mode := "ssr"
+	for _, o := range opts {
+		if m, exists := o["mode"]; exists {
+			if modeStr, ok := m.(string); ok {
+				mode = modeStr
+			}
+		}
+	}
+
+	if mode == "ssr" {
+		htmlOutput, err = svelTemplRenderToString(componentName, iso, componentProps)
+	} else {
+		htmlOutput = ""
+	}
 
 	if err != nil {
 		return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
@@ -44,13 +62,13 @@ func svelTemplComponent(iso *v8go.Isolate, componentName string, internalId stri
 	}
 
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
-		_, err := io.WriteString(w, propScript+htmlOutput+hydrationScript(componentName, internalId))
+		_, err := io.WriteString(w, propScript+htmlOutput+hydrationScript(componentName, internalId, mode))
 		return err
 	})
 }
 
 // TODO most of this can be re-used, the only dynamic part is getting the Component class and target element
-func hydrationScript(componentName string, internalId string) string {
+func hydrationScript(componentName string, internalId string, mode string) string {
 	csrPath := codegen.ComponentMap[componentName]
 	return fmt.Sprintf(`
 		<script type="module">
@@ -62,6 +80,7 @@ func hydrationScript(componentName string, internalId string) string {
 
 				if (target.firstElementChild?.tagName === "SCRIPT") {
 					props = JSON.parse(target.firstElementChild.textContent ?? "{}");
+					props.mode = "%s";
 				}
 
 				target.innerHTML = "";
@@ -72,7 +91,7 @@ func hydrationScript(componentName string, internalId string) string {
 				});
 			})
 		</script>
-	`, csrPath, componentName, internalId)
+	`, csrPath, componentName, internalId, mode)
 }
 
 func svelTemplRenderToString(componentName string, iso *v8go.Isolate, componentProps []byte) (string, error) {
