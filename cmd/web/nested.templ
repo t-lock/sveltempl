@@ -1,0 +1,11 @@
+package web
+
+templ Nested() {
+	@Base() {
+		<h1>Nested Svelte Components</h1>
+		@Nav()
+		<div class="max-w-3xl">
+			@Svelte("Nested", nil)
+		</div>
+	}
+}

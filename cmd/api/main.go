@@ -15,6 +15,7 @@ func main() {
 	http.Handle("/trello-clone", templ.Handler(web.TrelloClone()))
 	http.HandleFunc("/htmx", web.HTMXHandler)
 	http.Handle("/modes", templ.Handler(web.Modes()))
+	http.Handle("/nested", templ.Handler(web.Nested()))
 
 	fileServer := http.FileServer(http.FS(web.Files))
 	http.Handle("/assets/", fileServer)
