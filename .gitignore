@@ -1,6 +1,9 @@
 # Svelte built files
 /cmd/web/assets/svelte
 
+# Tailwind built files
+output.css
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
