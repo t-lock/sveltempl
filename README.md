@@ -38,3 +38,19 @@ From the project root:
 ### Niceties
 
 To really grok working with this stack, you'll want to make sure your IDE is configured with the appropriate tooling / extensions for Go, Templ, Svelte, and Tailwind. Without them, ymmv.
+
+---
+
+**Bonus:**
+If you use **sveltempl** with Echo, HTMX and Tailwind, and deploy with Docker and Nginx, you can enjoy claiming you run the `GETSHTDN` stack!
+
+```
+G E T S H T D N
+o c e v t a o g
+  h m e m i c i
+  o p l x l k n
+    l t   w e x
+      e   i r
+          n
+          d
+```
