@@ -8,6 +8,11 @@ To work effectively with **sveltempl**, start by building out your routing and l
 
 All the Svelte APIs you know and love are available: global stores, reactive delarations, scoped styles, motion primitives, etc... You can have your cake and eat it too 🍰 _(just pay for it with a few ms)_.
 
+>Demo the examples in this repo online at [sveltempl.tlock.dev](https://sveltempl.tlock.dev)
+>
+>_**Note:** My server, like me, is located in Japan 🎌, so keep that in mind._
+
+
 **Note**: In the future, this repo will house the **sveltempl** Go library package and an accompanying Vite plugin, while an example application will be provided in a sister repo. For now, this repo combines all three and acts more as a starter template, but if you want to star or follow the project, this is the repo to do that. Semver library releases will be provided here.
 
 ## Getting Started
