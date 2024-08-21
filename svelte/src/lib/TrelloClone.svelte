@@ -1,5 +1,4 @@
 <script lang="ts">
-  // This is done in a single file for clarity. A more factored version here: https://svelte.dev/repl/288f827275db4054b23c437a572234f6?version=3.38.2
   import { dndzone } from "svelte-dnd-action";
   import { flip } from "svelte/animate";
 
@@ -20,23 +19,57 @@
   export let board: Board = [];
 
   const flipDurationMs = 200;
+
   function handleDndConsiderColumns(e: any) {
     board = e.detail.items;
   }
+
   function handleDndFinalizeColumns(e: any) {
     board = e.detail.items;
   }
+
   function handleDndConsiderCards(cid: any, e: any) {
     const colIdx = board.findIndex((c) => c.id === cid);
     board[colIdx].items = e.detail.items;
     board = [...board];
   }
+
   function handleDndFinalizeCards(cid: any, e: any) {
     const colIdx = board.findIndex((c) => c.id === cid);
     board[colIdx].items = e.detail.items;
     board = [...board];
   }
+
+  async function handleBake() {
+    try {
+      const response = await fetch("/api/updateBoard", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(board),
+      });
+
+      if (response.ok) {
+        try {
+          const data = await response.json();
+          console.log(data);
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        console.warn(response);
+        console.warn(await response.json());
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 </script>
+
+<section>
+  <button class="" on:click={handleBake}>Bake Now!</button>
+</section>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
