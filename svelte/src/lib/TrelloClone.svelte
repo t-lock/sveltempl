@@ -26,6 +26,7 @@
 
   function handleDndFinalizeColumns(e: any) {
     board = e.detail.items;
+    handleBake()
   }
 
   function handleDndConsiderCards(cid: any, e: any) {
@@ -38,6 +39,7 @@
     const colIdx = board.findIndex((c) => c.id === cid);
     board[colIdx].items = e.detail.items;
     board = [...board];
+    handleBake()
   }
 
   async function handleBake() {
@@ -50,26 +52,15 @@
         body: JSON.stringify(board),
       });
 
-      if (response.ok) {
-        try {
-          const data = await response.json();
-          console.log(data);
-        } catch (error) {
-          console.error(error);
-        }
-      } else {
-        console.warn(response);
-        console.warn(await response.json());
+      if (!response.ok) {
+        console.error(response);
+        console.error(await response.json());
       }
     } catch (error) {
       console.error(error);
     }
   }
 </script>
-
-<section>
-  <button class="" on:click={handleBake}>Bake Now!</button>
-</section>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
