@@ -6,6 +6,7 @@ all: build
 build:
 	@echo "Building..."
 	@templ generate
+	@cd svelte && npm run build && cd ../
 	@tailwindcss -i cmd/web/assets/css/input.css -o cmd/web/assets/css/output.css
 	@go build -o main cmd/api/main.go
 
@@ -30,13 +31,17 @@ clean:
 # Live Reload
 watch:
 	@if command -v air > /dev/null; then \
-	    air; \
+	    (trap 'kill 0' EXIT; \
+	    (cd svelte && npm run dev) & \
+	    SVELTEMPL_HMR=1 air); \
 	    echo "Watching...";\
 	else \
 	    read -p "Go's 'air' is not installed on your machine. Do you want to install it? [Y/n] " choice; \
 	    if [ "$$choice" != "n" ] && [ "$$choice" != "N" ]; then \
 	        go install github.com/air-verse/air@latest; \
-	        air; \
+	        (trap 'kill 0' EXIT; \
+	        (cd svelte && npm run dev) & \
+	        SVELTEMPL_HMR=1 air); \
 	        echo "Watching...";\
 	    else \
 	        echo "You chose not to install air. Exiting..."; \
@@ -44,4 +49,4 @@ watch:
 	    fi; \
 	fi
 
-.PHONY: all build run test clean
+.PHONY: all build run test clean watch

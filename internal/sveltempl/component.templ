@@ -70,6 +70,11 @@ func svelTemplComponent(iso *v8go.Isolate, componentName string, internalId stri
 // TODO most of this can be re-used, the only dynamic part is getting the Component class and target element
 func hydrationScript(componentName string, internalId string, mode string) string {
 	csrPath := codegen.ComponentMap[componentName]
+
+	if os.Getenv("SVELTEMPL_HMR") != "" {
+		csrPath = "http://localhost:5173/src/lib/" + componentName + ".svelte"
+	}
+
 	return fmt.Sprintf(`
 		<script type="module">
 			import("%s").then((module) => {

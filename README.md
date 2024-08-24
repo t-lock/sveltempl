@@ -31,14 +31,16 @@ These instructions will get you a demo application up and running for developmen
 From the `/svelte` directory:
 
 - Install dependencies `npm install`
-- Build Svelte client and server bundles `npm run build`
+- That's it. Dev/build commands are handled by our `make` commands in the next section.
 
 ### Go
 
 From the project root:
 
 - Install dependencies `go get`
-- Start a live-reloading process to recompile your build on changes `make watch`
+- Start a live-reloading process to recompile your build on changes `make watch`. 
+  - This will also fire up your svelte components with Hot Module Reloading. If you're only changing a svelte file, you'll instantly see that change in the browser with no recompile/reload step.
+- Compile a prod-ready build with `make build` and run it with `make run`.
 
 ### Niceties
 
