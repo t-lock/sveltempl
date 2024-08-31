@@ -1,6 +1,6 @@
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { readdirSync, statSync } from "fs";
-import { basename, join, resolve } from "path";
+import { join, resolve } from "path";
 import { defineConfig } from "vite";
 import iifeBundle from "./iife-custom-plugin";
 
@@ -17,11 +17,12 @@ function getAllSvelteComponents(dir: string, fileList: string[] = []) {
   return fileList;
 }
 
-// Find all Svelte components in the src/lib directory
-const componentFiles = getAllSvelteComponents(resolve(__dirname, "src/lib"));
+// Find all Svelte components in the src directory
+const srcDir = resolve(__dirname, "src");
+const componentFiles = getAllSvelteComponents(srcDir);
 
 const input = componentFiles.reduce((acc, file) => {
-  const name = basename(file, ".svelte"); // Use the base name without the directory
+  const name = file.replace(srcDir, "").replace(".svelte", "").replace("/", "");
   acc[name] = resolve(__dirname, file);
   return acc;
 }, {} as Record<string, string>);

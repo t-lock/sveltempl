@@ -21,10 +21,10 @@ templ Modes() {
 					</div>
 				</div>
 				<div class="basis-1/3">
-					@Svelte("ModeBox", []byte(`{"text": "SSR + Hydration"}`))
+					@Svelte("lib/ModeBox", []byte(`{"text": "SSR + Hydration"}`))
 				</div>
 				<div class="basis-1/3">
-					@Svelte("ModeBox", []byte(`{"text": "CSR Only"}`), Options{"mode": "csr"})
+					@Svelte("lib/ModeBox", []byte(`{"text": "CSR Only"}`), Options{"mode": "csr"})
 				</div>
 			</div>
 		</div>

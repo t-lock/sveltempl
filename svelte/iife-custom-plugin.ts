@@ -1,5 +1,6 @@
+import { readdirSync, statSync } from "fs";
 import fs from "fs/promises";
-import path from "path";
+import path, { join } from "path";
 import { rollup } from "rollup";
 import { Plugin } from "vite";
 
@@ -7,6 +8,7 @@ type Options = {
   outputDir?: string;
   inputDir?: string;
 };
+
 export default function iifeBundle(options: Options = {}): Plugin {
   const { outputDir = "dist-ssr-go", inputDir = "dist-ssr" } = options;
 
@@ -18,16 +20,17 @@ export default function iifeBundle(options: Options = {}): Plugin {
       await fs.rm(outputDir, { recursive: true, force: true });
       await fs.mkdir(outputDir, { recursive: true });
 
-      const inputFiles = await fs.readdir(inputDir);
-      const jsFiles = inputFiles.filter((file) => file.endsWith(".js"));
+      const fileList = getFilePathsRecursive(inputDir).filter((file) =>
+        file.endsWith(".js")
+      );
 
-      for (const file of jsFiles) {
-        const inputPath = path.join(inputDir, file);
-        const outputPath = path.join(outputDir, file);
+      for (const file of fileList) {
+        if (file.includes("/assets/")) continue;
+
         const name = path.basename(file, ".js");
 
         const bundle = await rollup({
-          input: inputPath,
+          input: file,
           onwarn: (warning, warn) => {
             if (warning.code === "CIRCULAR_DEPENDENCY") return;
             warn(warning);
@@ -35,7 +38,7 @@ export default function iifeBundle(options: Options = {}): Plugin {
         });
 
         await bundle.write({
-          file: outputPath,
+          file: file.replace(inputDir, outputDir),
           format: "iife",
           name,
           sourcemap: false,
@@ -47,4 +50,15 @@ export default function iifeBundle(options: Options = {}): Plugin {
       console.log(`IIFE bundles generated in ${outputDir}`);
     },
   };
+}
+
+function getFilePathsRecursive(inputDir: string): string[] {
+  return readdirSync(inputDir).flatMap((file) => {
+    const filePath = join(inputDir, file);
+    if (statSync(filePath).isDirectory()) {
+      return getFilePathsRecursive(filePath);
+    } else {
+      return filePath;
+    }
+  });
 }
