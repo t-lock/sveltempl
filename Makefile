@@ -7,7 +7,7 @@ build:
 	@echo "Building..."
 	@templ generate
 	@cd svelte && npm run build && cd ../
-	@tailwindcss -i cmd/web/assets/css/input.css -o cmd/web/assets/css/output.css
+	@npx tailwindcss -i cmd/web/assets/css/input.css -o cmd/web/assets/css/output.css
 	@go build -o main cmd/api/main.go
 
 # Run the application

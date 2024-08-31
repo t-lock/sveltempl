@@ -23,7 +23,6 @@ These instructions will get you a demo application up and running for developmen
 
 - Lastest version of Go
 - Templ
-- Tailwind standalone CLI
 - Node.js (used only at build-time for Svelte)
 
 ### Svelte
