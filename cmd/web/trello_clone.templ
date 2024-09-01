@@ -15,18 +15,16 @@ func props() []byte {
 templ TrelloClone() {
 	@Base() {
 		<h1>sveltempl</h1>
-
 		@Nav()
-
 		<div class="box max-w-[814px] flex flex-col gap-4 mx-auto">
 			<p>Try dragging items or whole columns. <em><strong class="text-yellow-400">Svelte</strong></em> makes achieving this type of UI easy.</p>
 			<p>
-				<em><strong class="text-yellow-400">Sveltempl</strong></em>, on the other hand, makes server rendering and sharing state between client and server easy. Your front-end Svelte code will be identical to what it would be in an SPA or traditional "Islands" setup, just without the pesky network/api code!</p>
+				<em><strong class="text-yellow-400">Sveltempl</strong></em>, on the other hand, makes server rendering and sharing state between client and server easy. Your front-end Svelte code will be identical to what it would be in an SPA or traditional "Islands" setup, just without the pesky network/api code!
+			</p>
 			<p class="text-gray-400">
 				<em>Go ahead, Giv'er a <strong class="text-yellow-400">refresh!</strong> How about a private tab or <strong class="text-yellow-400">another browser</strong>?</em>
 			</p>
 		</div>
-
-		@Svelte("TrelloClone", props())
+		@Svelte("lib/TrelloClone", props())
 	}
 }

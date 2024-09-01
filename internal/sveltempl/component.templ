@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"rogchap.com/v8go"
 	"sveltempl/internal/codegen"
@@ -72,7 +73,7 @@ func hydrationScript(componentName string, internalId string, mode string) strin
 	csrPath := codegen.ComponentMap[componentName]
 
 	if os.Getenv("SVELTEMPL_HMR") != "" {
-		csrPath = "http://localhost:5173/src/lib/" + componentName + ".svelte"
+		csrPath = "http://localhost:5173/src/" + componentName + ".svelte"
 	}
 
 	return fmt.Sprintf(`
@@ -99,20 +100,23 @@ func hydrationScript(componentName string, internalId string, mode string) strin
 	`, csrPath, componentName, internalId, mode)
 }
 
-func svelTemplRenderToString(componentName string, iso *v8go.Isolate, componentProps []byte) (string, error) {
+// ? componentQualName includes leading path info relative to svelte/src
+func svelTemplRenderToString(componentQualName string, iso *v8go.Isolate, componentProps []byte) (string, error) {
 	// Create a new Javascript context
 	ctx := v8go.NewContext(iso)
 
-	if componentName == "" {
+	if componentQualName == "" {
 		return "", fmt.Errorf("you must pass in a component name to render")
 	}
+
+	componentName := path.Base(componentQualName)
 
 	// Construct the file path using fmt.Sprintf for string interpolation
 	cwd, err := os.Getwd()
 	if err != nil {
 		log.Fatalf("Failed to get current working directory: %v", err)
 	}
-	componentPath := filepath.Join(cwd, "svelte/dist-ssr-go", fmt.Sprintf("%s.js", componentName))
+	componentPath := filepath.Join(cwd, "svelte/dist-ssr-go", fmt.Sprintf("%s.js", componentQualName))
 
 	// Read the JavaScript file from disk
 	componentScript, err := os.ReadFile(componentPath)

@@ -6,10 +6,10 @@ templ Home() {
 		@Nav()
 		<div class="boxes">
 			<div class="box">
-				@Svelte("BoxOne", []byte(homeProps()))
+				@Svelte("lib/BoxOne", []byte(homeProps()))
 			</div>
 			<div class="box">
-				@Svelte("BoxTwo", nil)
+				@Svelte("lib/BoxTwo", nil)
 			</div>
 		</div>
 	}

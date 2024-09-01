@@ -1,2 +1,2 @@
-// ! why on earth does this work?
-[].forEach((name) => import(`./lib/${name}.svelte`));
+const modules = import.meta.glob("./lib/**/*.svelte");
+Object.keys(modules).forEach((path) => modules[path]());

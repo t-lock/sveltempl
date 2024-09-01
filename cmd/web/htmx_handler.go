@@ -17,10 +17,10 @@ func HTMXHandler(w http.ResponseWriter, r *http.Request) {
 
 func getRandomComponent() templ.Component {
 	components := []templ.Component{
-		Svelte("BoxOne", nil),
-		Svelte("BoxTwo", nil),
-		Svelte("BoxThree", nil),
-		Svelte("ModeBox", []byte(`{"text": "I got picked randomly!"}`)),
+		Svelte("lib/BoxOne", nil),
+		Svelte("lib/BoxTwo", nil),
+		Svelte("lib/BoxThree", nil),
+		Svelte("lib/ModeBox", []byte(`{"text": "I got picked randomly!"}`)),
 	}
 
 	return components[rand.Intn(len(components))]
