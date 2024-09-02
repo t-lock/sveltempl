@@ -11,7 +11,7 @@ import (
 // TODO make type-safe in a way that provides IDE completions
 type components map[string]string
 
-var ComponentMap = populateComponentMap("cmd/web/assets/svelte/")
+var ComponentMap = populateComponentMap("cmd/web/assets/js/client")
 
 // populateComponentMap recursively traverses the given directory and populates the component map
 func populateComponentMap(dir string) components {
@@ -45,7 +45,7 @@ func traverseDirectory(dir string, compMap components) error {
 				value := filePath
 
 				// Extract the relative path
-				relPath, _ := filepath.Rel("cmd/web/assets/svelte", dir)
+				relPath, _ := filepath.Rel("cmd/web/assets/js/client", dir)
 				if relPath != "." {
 					key = filepath.Join(relPath, key)
 				}

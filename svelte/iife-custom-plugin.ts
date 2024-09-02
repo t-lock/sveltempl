@@ -10,7 +10,7 @@ type Options = {
 };
 
 export default function iifeBundle(options: Options = {}): Plugin {
-  const { outputDir = "dist-ssr-go", inputDir = "dist-ssr" } = options;
+  const { outputDir = "dist/ssr-go", inputDir = "dist/ssr" } = options;
 
   return {
     name: "sveltempl-iife-bundle",

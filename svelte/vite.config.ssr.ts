@@ -31,8 +31,8 @@ export default defineConfig({
   plugins: [
     svelte(),
     iifeBundle({
-      outputDir: "dist-ssr-go",
-      inputDir: "dist-ssr",
+      outputDir: "dist/ssr-go",
+      inputDir: "dist/ssr",
     }),
   ],
   build: {
@@ -40,7 +40,7 @@ export default defineConfig({
     rollupOptions: {
       input,
       output: {
-        dir: "dist-ssr",
+        dir: "dist/ssr",
       },
     },
   },

@@ -16,7 +16,7 @@ export default function cleanCopy(relativePath: string) {
       fs.mkdirSync(targetDir, { recursive: true });
 
       // Copy files
-      const srcDir = path.resolve(__dirname, "./dist");
+      const srcDir = path.resolve(__dirname, "./dist/client");
       const fileList = getFilePathsRecursive(srcDir);
 
       fileList.forEach((file) => {

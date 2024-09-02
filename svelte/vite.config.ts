@@ -8,13 +8,13 @@ export default defineConfig({
     svelte({
       emitCss: false,
     }),
-    cleanCopy("../cmd/web/assets/svelte"),
+    cleanCopy("../cmd/web/assets/js/client"),
   ],
   build: {
     rollupOptions: {
       input: "./src/main.ts",
       output: {
-        dir: "dist",
+        dir: "dist/client",
         format: "es",
         chunkFileNames: ({ facadeModuleId }) => {
           if (facadeModuleId) {

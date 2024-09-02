@@ -1,5 +1,5 @@
 # Svelte built files
-/cmd/web/assets/svelte
+/cmd/web/assets/js/client
 
 # Tailwind built files
 output.css

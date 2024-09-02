@@ -116,7 +116,7 @@ func svelTemplRenderToString(componentQualName string, iso *v8go.Isolate, compon
 	if err != nil {
 		log.Fatalf("Failed to get current working directory: %v", err)
 	}
-	componentPath := filepath.Join(cwd, "svelte/dist-ssr-go", fmt.Sprintf("%s.js", componentQualName))
+	componentPath := filepath.Join(cwd, "svelte/dist/ssr-go", fmt.Sprintf("%s.js", componentQualName))
 
 	// Read the JavaScript file from disk
 	componentScript, err := os.ReadFile(componentPath)
